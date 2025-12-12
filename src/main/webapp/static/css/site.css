@@ -1,0 +1,72 @@
+/* 公共站点样式：登录/注册共用 */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+/* 整体布局容器 */
+.wrap {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+/* 卡片（半透明） */
+.card {
+  width: 420px;
+  max-width: calc(100% - 48px);
+  /* 半透明白色，保留背景可见性 */
+  background: rgba(255,255,255,0.70);
+  /* 兼容性：在支持的浏览器上增加毛玻璃效果 */
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(2,6,23,0.25);
+  padding: 28px;
+  box-sizing: border-box;
+}
+
+.brand { text-align: center; margin-bottom: 14px; }
+.brand h1 { margin: 0; font-size: 20px; letter-spacing: 1px; color: #0b3b6f; }
+.brand p { margin: 6px 0 0; font-size: 13px; color: #6b7280; }
+
+.form-group { margin-bottom: 12px; }
+label { display: block; font-size: 13px; color: #374151; margin-bottom: 6px; }
+input[type="text"], input[type="password"], input[type="email"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+}
+
+.btn {
+  width: 100%;
+  padding: 10px 12px;
+  background: linear-gradient(180deg,#2563eb,#1e40af);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.meta { text-align: center; margin-top: 12px; font-size: 13px; color: #6b7280; }
+.meta a { color: #2563eb; text-decoration: none; }
+
+.msg { padding: 8px 10px; margin-bottom: 12px; border-radius: 8px; font-size: 13px; }
+.msg.success { background: #ecfdf5; color: #065f46; border: 1px solid #bbf7d0; }
+.msg.error { background: #fff1f2; color: #991b1b; border: 1px solid #fca5a5; }
+
+@media (max-width: 480px) { .card { width: 100%; padding: 20px; } }
