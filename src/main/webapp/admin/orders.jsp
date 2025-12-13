@@ -63,6 +63,8 @@
     <!-- 导航 -->
     <div style="margin-bottom: 20px;">
         <a href="../index.jsp">返回首页</a>
+        <span style="margin: 0 10px;">|</span>
+        <a href="${pageContext.request.contextPath}/admin/products">商品管理</a>
     </div>
 
     <!-- 消息 -->

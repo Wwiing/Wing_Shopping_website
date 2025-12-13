@@ -29,11 +29,12 @@
         /* 顶部导航栏（和其他页面统一风格） */
         .top-nav {
             max-width: 1000px;
+            max-height: fit-content;
             margin: 0 auto 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0,0,0,0.8);
+            background-image: url("static/images/bg-4.jpg");
             color: #fff;
             padding: 15px 20px;
             border-radius: 8px;
@@ -60,9 +61,7 @@
         .cart-item {
             background: rgba(255,255,255,0.95);
             border: none;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             padding: 20px;
-            margin-bottom: 15px;
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -156,11 +155,10 @@
         /* 总计区域 */
         .total-section {
             text-align: right;
-            margin-top: 20px;
             padding: 20px;
             background: rgba(255,255,255,0.95);
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px 2px rgba(0, 0, 0, 0.1);
         }
         .total-section h2 {
             color: #e4393c;

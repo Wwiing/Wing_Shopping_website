@@ -18,7 +18,7 @@
         }
         /* 背景设置（固定+铺满，滚动不消失） */
         body {
-            background: url('<%= request.getContextPath() %>/static/images/bg-3.jpg') no-repeat center fixed;
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)),url('<%= request.getContextPath() %>/static/images/bg-1.jpg') no-repeat center fixed;
             background-size: cover;
             min-height: 100vh;
             padding-top: 20px;
@@ -28,11 +28,11 @@
         .top-nav {
             max-width: 900px;
             margin: 0 auto 20px;
-            padding: 0 20px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0,0,0,0.8);
+            background-image: url("static/images/bg-4.jpg");
             color: #fff;
             border-radius: 8px;
         }

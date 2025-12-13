@@ -20,7 +20,7 @@
         /* 主容器卡片美化 */
         .container {
             max-width: 1000px;
-            margin: 150px auto 0;
+            margin: 50px auto 0;
             background: rgba(255,255,255,0.95);
             padding: 30px;
             border-radius: 12px;

@@ -30,7 +30,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: rgba(0,0,0,0.8);
+            background-image: url("static/images/bg-12.jpg");
             color: #fff;
             z-index: 999;
         }

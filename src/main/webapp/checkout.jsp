@@ -16,7 +16,7 @@
         }
         /* 背景设置（按你要求：图片保持原始尺寸，两边白色） */
         body {
-            background: url('<%= request.getContextPath() %>/static/images/bg-2.jpg') no-repeat center top;
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)),url('<%= request.getContextPath() %>/static/images/bg-1.jpg') no-repeat center top;
             background-size: 100%;
             min-height: 100vh;
             padding-top: 20px;
@@ -28,7 +28,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0,0,0,0.8);
+            background-image: url("static/images/bg-4.jpg");
             color: #fff;
             padding: 15px 20px;
             border-radius: 8px;

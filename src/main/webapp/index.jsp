@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>购物网站</title>
+    <title>YY唱片店</title>
     <style>
         * {
             margin: 0;

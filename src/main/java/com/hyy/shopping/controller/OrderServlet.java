@@ -208,13 +208,13 @@ public class OrderServlet extends HttpServlet {
                 user.setBalance(newBalance);
                 request.getSession().setAttribute("user", user);
 
-                // 发送订单创建邮件
-                try {
-                    EmailUtil.sendOrderCreatedEmail(user.getEmail(), order.getId(), order.getTotalAmount());
-                    System.out.println("订单创建邮件发送成功");
-                } catch (Exception e) {
-                    System.out.println("邮件发送失败: " + e.getMessage());
-                }
+                // 移除订单创建邮件发送逻辑
+                // try {
+                //     EmailUtil.sendOrderCreatedEmail(user.getEmail(), order.getId(), order.getTotalAmount());
+                //     System.out.println("订单创建邮件发送成功");
+                // } catch (Exception e) {
+                //     System.out.println("邮件发送失败: " + e.getMessage());
+                // }
 
 
                 // 清空购物车

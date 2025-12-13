@@ -109,8 +109,18 @@ public class AdminOrderServlet extends HttpServlet {
             // 获取用户信息
             User user = userDao.findById(order.getUserId());
             if (user != null && user.getEmail() != null) {
-                // 发送发货邮件
-                boolean emailSent = EmailUtil.sendShippingEmail(user.getEmail(), order.getId(), trackingNumber, carrier);
+                // 获取订单项详情（包含商品信息）
+                List<com.hyy.shopping.model.OrderItem> items = orderDao.findItemsByOrderId(orderId);
+
+                // 发送发货邮件（包含商品详情）
+                boolean emailSent = EmailUtil.sendShippingEmail(
+                    user.getEmail(),
+                    order.getId(),
+                    trackingNumber,
+                    carrier,
+                    items,
+                    order.getTotalAmount()
+                );
                 System.out.println("发货邮件发送结果: " + (emailSent ? "成功" : "失败"));
             }
 
@@ -138,16 +148,5 @@ public class AdminOrderServlet extends HttpServlet {
             out.print("{\"success\":false, \"message\":\"订单取消失败\"}");
         }
         out.flush();
-    }
-
-    private void sendShippingEmail(String toEmail, Order order, String trackingNumber, String carrier) {
-        // 使用真实邮件发送
-        boolean emailSent = EmailUtil.sendShippingEmail(toEmail, order.getId(), trackingNumber, carrier);
-
-        if (emailSent) {
-            System.out.println("发货邮件发送成功: " + toEmail);
-        } else {
-            System.out.println("发货邮件发送失败: " + toEmail);
-        }
     }
 }
