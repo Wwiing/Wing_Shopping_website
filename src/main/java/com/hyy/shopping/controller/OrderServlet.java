@@ -59,6 +59,11 @@ public class OrderServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // 1. 设置编码，防止参数乱码
+        request.setCharacterEncoding("UTF-8");
+
+        String action = request.getParameter("action");
+
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
 
@@ -67,7 +72,10 @@ public class OrderServlet extends HttpServlet {
             return;
         }
 
-        String action = request.getParameter("action");
+        if (action == null) {
+            response.sendRedirect("orders.jsp?error=Invalid operation");
+            return;
+        }
 
         try {
             switch (action) {
@@ -80,6 +88,8 @@ public class OrderServlet extends HttpServlet {
                 case "confirm":
                     confirmOrder(request, response, user);
                     break;
+                default:
+                    response.sendRedirect("orders.jsp?error=Unknown action");
             }
 
         } catch (Exception e) {
@@ -208,14 +218,25 @@ public class OrderServlet extends HttpServlet {
                 user.setBalance(newBalance);
                 request.getSession().setAttribute("user", user);
 
-                // 移除订单创建邮件发送逻辑
-                // try {
-                //     EmailUtil.sendOrderCreatedEmail(user.getEmail(), order.getId(), order.getTotalAmount());
-                //     System.out.println("订单创建邮件发送成功");
-                // } catch (Exception e) {
-                //     System.out.println("邮件发送失败: " + e.getMessage());
-                // }
-
+                // 发送下单成功确认邮件（非阻塞）
+                try {
+                    // 为每个订单项填充商品信息，便于邮件显示商品名称
+                    for (OrderItem oi : orderItems) {
+                        Product p = productDao.findById(oi.getProductId());
+                        if (p != null) {
+                            oi.setProduct(p);
+                        }
+                    }
+                    boolean mailSent = EmailUtil.sendOrderConfirmationEmail(user.getEmail(), order.getId(), orderItems, order.getTotalAmount());
+                    if (mailSent) {
+                        System.out.println("订单创建确认邮件已发送给: " + user.getEmail());
+                    } else {
+                        System.out.println("订单创建确认邮件发送失败。");
+                    }
+                } catch (Exception e) {
+                    System.out.println("发送订单确认邮件时出现异常: " + e.getMessage());
+                    // 不影响用户下单流程
+                }
 
                 // 清空购物车
                 cartDao.clearCart(user.getId());
@@ -317,49 +338,48 @@ public class OrderServlet extends HttpServlet {
     }
 
     private void confirmOrder(HttpServletRequest request, HttpServletResponse response, User user)
-            throws Exception {
-
-        Long orderId = Long.parseLong(request.getParameter("orderId"));
-        Order order = orderDao.findById(orderId);
-
-        response.setContentType("application/json;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-
-        // 创建JSON响应对象
-        Map<String, Object> result = new HashMap<>();
+            throws IOException {
 
         try {
+            String orderIdStr = request.getParameter("orderId");
+            if (orderIdStr == null || orderIdStr.trim().isEmpty()) {
+                response.sendRedirect("orders.jsp?error=" + java.net.URLEncoder.encode("订单ID不能为空", "UTF-8"));
+                return;
+            }
+
+            Long orderId;
+            try {
+                orderId = Long.parseLong(orderIdStr);
+            } catch (NumberFormatException e) {
+                response.sendRedirect("orders.jsp?error=" + java.net.URLEncoder.encode("无效的订单ID格式", "UTF-8"));
+                return;
+            }
+
+            Order order = orderDao.findById(orderId);
+
             // 检查订单是否属于当前用户且可以确认收货
             if (order == null || !order.getUserId().equals(user.getId())) {
-                result.put("success", false);
-                result.put("message", "订单不存在");
-                out.print(new com.google.gson.Gson().toJson(result));
+                response.sendRedirect("orders.jsp?error=" + java.net.URLEncoder.encode("订单不存在", "UTF-8"));
                 return;
             }
 
             if (!"SHIPPED".equals(order.getStatus())) {
-                result.put("success", false);
-                result.put("message", "订单无法确认收货");
-                out.print(new com.google.gson.Gson().toJson(result));
+                response.sendRedirect("orders.jsp?error=" + java.net.URLEncoder.encode("订单无法确认收货", "UTF-8"));
                 return;
             }
 
             boolean success = orderDao.updateStatus(orderId, "DELIVERED");
 
             if (success) {
-                result.put("success", true);
-                result.put("message", "确认收货成功");
+                response.sendRedirect("orders.jsp?message=" + java.net.URLEncoder.encode("确认收货成功", "UTF-8"));
             } else {
-                result.put("success", false);
-                result.put("message", "确认收货失败");
+                response.sendRedirect("orders.jsp?error=" + java.net.URLEncoder.encode("确认收货失败", "UTF-8"));
             }
 
         } catch (Exception e) {
-            result.put("success", false);
-            result.put("message", "系统错误: " + e.getMessage());
+            e.printStackTrace();
+            response.sendRedirect("orders.jsp?error=" + java.net.URLEncoder.encode("系统错误: " + e.getMessage(), "UTF-8"));
         }
-
-        out.print(new com.google.gson.Gson().toJson(result));
-        out.flush();
     }
 }
+

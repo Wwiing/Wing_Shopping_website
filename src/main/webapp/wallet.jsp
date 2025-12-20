@@ -70,7 +70,8 @@
     <div style="margin-bottom: 20px;">
         <a href="index.jsp">首页</a> |
         <a href="order">我的订单</a> |
-        <a href="products">继续购物</a>
+        <a href="products">继续购物</a> |
+        <a href="cart">返回购物车</a>
     </div>
 
     <!-- 消息 -->

@@ -15,6 +15,7 @@ public class EmailUtil {
     private static final String FROM_EMAIL = "1057174179@qq.com";
     private static final String FROM_NAME = "YY唱片";
 
+
     /**
      * 发送邮件
      */
@@ -28,6 +29,7 @@ public class EmailUtil {
         props.put("mail.smtp.port", SMTP_PORT);
         props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         props.put("mail.smtp.socketFactory.port", SMTP_PORT);
+
 
         // 创建会话
         Session session = Session.getInstance(props,
@@ -72,10 +74,7 @@ public class EmailUtil {
             // 创建图片部分
             MimeBodyPart imagePart = new MimeBodyPart();
             // 注意：这里需要确保图片路径正确。在Web应用中，通常需要获取绝对路径。
-            // 由于这是一个工具类，我们假设图片位于类路径下或者硬编码一个绝对路���。
-            // 为了简单起见，这里我们尝试从类路径加载，或者使用一个占位符如果找不到。
-            // 更好的方式是传入图片路径，或者使用网络图片URL。
-            // 这里我们尝试读取本地文件。请确保路径正确。
+            //String imagePath = "/usr/local/tomcat/webapps/shopping_website/static/images/eason.jpg";
             String imagePath = "D:\\code\\shopping_website\\src\\main\\webapp\\static\\images\\eason.jpg";
             try {
                 javax.activation.DataSource fds = new javax.activation.FileDataSource(imagePath);
@@ -108,22 +107,6 @@ public class EmailUtil {
         }
     }
 
-    /**
-     * 发送订单创建邮件
-     */
-    public static boolean sendOrderCreatedEmail(String toEmail, Long orderId, BigDecimal totalAmount) {
-        String subject = "订单创建成功 - 订单号 #" + orderId;
-        String content = "尊敬的客户，<br><br>"
-                + "您的订单已成功创建！<br><br>"
-                + "<strong>订单信息:</strong><br>"
-                + "订单号: #" + orderId + "<br>"
-                + "订单金额: ¥" + totalAmount + "<br><br>"
-                + "您可以在“我的订单”页面查看订单详情。<br><br>"
-                + "感谢您的购买！<br>"
-                + "购物网站团队";
-
-        return sendEmail(toEmail, subject, content);
-    }
 
     /**
      * 发送发货邮件
@@ -167,6 +150,49 @@ public class EmailUtil {
     // 保留旧方法以兼容（如果其他地方用到），或者直接废弃
     public static boolean sendShippingEmail(String toEmail, Long orderId, String trackingNumber, String carrier) {
         return sendShippingEmail(toEmail, orderId, trackingNumber, carrier, null, BigDecimal.ZERO);
+    }
+
+    /**
+     * 发送下单成功确认邮件（订单已创建）
+     */
+    public static boolean sendOrderConfirmationEmail(String toEmail, Long orderId, java.util.List<com.hyy.shopping.model.OrderItem> items, BigDecimal totalAmount) {
+        String subject = "您的订单已提交成功 - 订单号 #" + orderId;
+
+        StringBuilder itemsHtml = new StringBuilder();
+        itemsHtml.append("<table style='width:100%; border-collapse: collapse; margin-top: 10px;'>");
+        itemsHtml.append("<tr style='background-color: #f2f2f2;'><th style='padding: 8px; text-align: left;'>商品</th><th style='padding: 8px; text-align: right;'>数量</th><th style='padding: 8px; text-align: right;'>价格</th></tr>");
+
+        if (items != null) {
+            for (com.hyy.shopping.model.OrderItem item : items) {
+                String productName = (item.getProduct() != null) ? item.getProduct().getName() : "未知商品";
+                itemsHtml.append("<tr>");
+                itemsHtml.append("<td style='padding: 8px; border-bottom: 1px solid #ddd;'>").append(productName).append("</td>");
+                itemsHtml.append("<td style='padding: 8px; border-bottom: 1px solid #ddd; text-align: right;'>").append(item.getQuantity()).append("</td>");
+                itemsHtml.append("<td style='padding: 8px; border-bottom: 1px solid #ddd; text-align: right;'>¥").append(item.getPrice()).append("</td>");
+                itemsHtml.append("</tr>");
+            }
+        }
+
+        itemsHtml.append("<tr><td colspan='2' style='padding: 8px; text-align: right; font-weight: bold;'>总计:</td><td style='padding: 8px; text-align: right; font-weight: bold; color: #d9534f;'>¥").append(totalAmount).append("</td></tr>");
+        itemsHtml.append("</table>");
+
+        String content = "尊敬的客户，<br><br>"
+                + "感谢您在YY唱片下单。我们已成功收到您的订单并正在处理。<br><br>"
+                + "<strong>订单信息:</strong><br>"
+                + "订单号: #" + orderId + "<br><br>"
+                + "<strong>订单详情:</strong><br>"
+                + itemsHtml.toString() + "<br><br>"
+                + "我们会在发货后再次通过邮件通知您物流信息。<br><br>"
+                + "如有疑问请联系客户服务。<br><br>"
+                + "祝您购物愉快！<br>"
+                + "YY唱片团队";
+
+        return sendEmail(toEmail, subject, content);
+    }
+
+    // 便利重载：仅使用订单号（无商品明细）
+    public static boolean sendOrderConfirmationEmail(String toEmail, Long orderId) {
+        return sendOrderConfirmationEmail(toEmail, orderId, null, BigDecimal.ZERO);
     }
 
     /**

@@ -178,6 +178,7 @@
     <div class="nav-links">
         <a href="index.jsp">首页</a> |
         <a href="products">所有商品</a> |
+        <a href="cart">查看购物车</a> |
         <a href="products?category=专辑">专辑</a> |
         <a href="products?category=演唱会">演唱会</a> |
         <a href="products?category=其他">其他</a>
