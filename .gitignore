@@ -1,39 +1,51 @@
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-.kotlin
+# Maven / Java
+/target/
+*.war
 
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-*.iws
+# Build files
+*.class
+
+# IntelliJ
+/.idea/
 *.iml
-*.ipr
 
-### Eclipse ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# Eclipse
+/.classpath
+/.project
+/.settings/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
-.vscode/
-
-### Mac OS ###
+# OS files
 .DS_Store
+Thumbs.db
+
+# Logs
+*.log
+/logs/
+
+# Temporary files
+*.tmp
+*.swp
+
+# Node (if any)
+node_modules/
+
+# IDE specific
+/.vscode/
+
+# Application specific
+shopping_website.war
+
+# Ignore local config/secrets — create src/main/resources/email-local.properties and add it to gitignore
+/src/main/resources/email-local.properties
+.env
+secrets.properties
+
+# Ignore compiled webapp libs (if any local copies)
+/src/main/webapp/WEB-INF/lib/
+
+# Ignore Tomcat work directories if present
+/work/
+
+# You may add other files that contain credentials or environment-specific data
+# e.g. config/local.properties, credentials.json
+
