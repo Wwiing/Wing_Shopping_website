@@ -10,9 +10,9 @@ public class EmailUtil {
     // 邮件服务器配置
     private static final String SMTP_HOST = "smtp.qq.com";
     private static final int SMTP_PORT = 465; // SSL端口
-    private static final String SMTP_USERNAME = "xxx@qq.com"; // 替换为你的QQ邮箱
-    private static final String SMTP_PASSWORD = "xxx"; // 替换为你的授权码
-    private static final String FROM_EMAIL = "xxx@qq.com";
+    private static final String SMTP_USERNAME = "1057174179@qq.com"; // 替换为你的QQ邮箱
+    private static final String SMTP_PASSWORD = "jovesrctqyeobaji"; // 替换为你的授权码
+    private static final String FROM_EMAIL = "1057174179@qq.com";
     private static final String FROM_NAME = "YY唱片";
 
 
@@ -74,8 +74,8 @@ public class EmailUtil {
             // 创建图片部分
             MimeBodyPart imagePart = new MimeBodyPart();
             // 注意：这里需要确保图片路径正确。在Web应用中，通常需要获取绝对路径。
-            //String imagePath = "/usr/local/tomcat/webapps/shopping_website/static/images/eason.jpg";
-            String imagePath = "D:\\code\\shopping_website\\src\\main\\webapp\\static\\images\\eason.jpg";
+            String imagePath = "/usr/local/tomcat/webapps/shopping_website/static/images/eason.jpg";
+            //String imagePath = "D:\\code\\shopping_website\\src\\main\\webapp\\static\\images\\eason.jpg";
             try {
                 javax.activation.DataSource fds = new javax.activation.FileDataSource(imagePath);
                 imagePart.setDataHandler(new javax.activation.DataHandler(fds));

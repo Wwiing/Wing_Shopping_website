@@ -1,6 +1,7 @@
 package com.hyy.shopping.dao;
 
 import com.hyy.shopping.model.Product;
+import com.hyy.shopping.model.SalesStatistic;
 import com.hyy.shopping.util.DatabaseUtil;
 import java.sql.*;
 import java.util.ArrayList;
@@ -206,6 +207,28 @@ public class ProductDaoImpl implements ProductDao {
             }
         }
         return products;
+    }
+
+    @Override
+    public List<SalesStatistic> getSalesStatistics() throws SQLException {
+        String sql = "SELECT p.*, SUM(oi.quantity) as total_quantity " +
+                "FROM products p " +
+                "JOIN order_items oi ON p.id = oi.product_id " +
+                "GROUP BY p.id " +
+                "ORDER BY total_quantity DESC";
+        List<SalesStatistic> stats = new ArrayList<>();
+
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Product product = extractProductFromResultSet(rs);
+                int totalQuantity = rs.getInt("total_quantity");
+                stats.add(new SalesStatistic(product, totalQuantity));
+            }
+            return stats;
+        }
     }
 
     private Product extractProductFromResultSet(ResultSet rs) throws SQLException {

@@ -35,4 +35,7 @@ public interface ProductDao {
 
     // 按条件分页查询商品，offset 从0开始，limit 为每页大小
     List<Product> findPaged(String category, String search, int offset, int limit) throws SQLException;
+
+    // 获取商品销售统计
+    List<com.hyy.shopping.model.SalesStatistic> getSalesStatistics() throws SQLException;
 }

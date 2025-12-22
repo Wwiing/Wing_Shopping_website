@@ -65,6 +65,8 @@
         <a href="../index.jsp">返回首页</a>
         <span style="margin: 0 10px;">|</span>
         <a href="${pageContext.request.contextPath}/admin/products">商品管理</a>
+        <span style="margin: 0 10px;">|</span>
+        <a href="${pageContext.request.contextPath}/admin/sales-report">销售报表</a>
     </div>
 
     <!-- 消息 -->
