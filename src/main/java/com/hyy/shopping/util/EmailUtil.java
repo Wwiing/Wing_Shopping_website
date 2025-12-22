@@ -10,9 +10,9 @@ public class EmailUtil {
     // 邮件服务器配置
     private static final String SMTP_HOST = "smtp.qq.com";
     private static final int SMTP_PORT = 465; // SSL端口
-    private static final String SMTP_USERNAME = "1057174179@qq.com"; // 替换为你的QQ邮箱
-    private static final String SMTP_PASSWORD = "jovesrctqyeobaji"; // 替换为你的授权码
-    private static final String FROM_EMAIL = "1057174179@qq.com";
+    private static final String SMTP_USERNAME = "xxx@qq.com"; // 替换为你的QQ邮箱
+    private static final String SMTP_PASSWORD = "xxx"; // 替换为你的授权码
+    private static final String FROM_EMAIL = "xxx@qq.com";
     private static final String FROM_NAME = "YY唱片";
 
 
