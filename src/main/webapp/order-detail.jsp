@@ -207,8 +207,15 @@
 <div class="top-nav">
     <h1>订单详情</h1>
     <div class="nav-links">
-        <a href="order">返回订单列表</a> |
-        <a href="products">继续购物</a>
+        <c:choose>
+            <c:when test="${sessionScope.user.role == 'ADMIN'}">
+                <a href="${pageContext.request.contextPath}/admin/orders">返回订单管理</a>
+            </c:when>
+            <c:otherwise>
+                <a href="order">返回订单列表</a> |
+                <a href="products">继续购物</a>
+            </c:otherwise>
+        </c:choose>
     </div>
 </div>
 
@@ -285,18 +292,36 @@
                 </button>
             </c:if>
 
-            <a href="order">
-                <button class="btn-back">返回订单列表</button>
-            </a>
+            <c:choose>
+                <c:when test="${sessionScope.user.role == 'ADMIN'}">
+                    <a href="${pageContext.request.contextPath}/admin/orders">
+                        <button class="btn-back">返回订单管理</button>
+                    </a>
+                </c:when>
+                <c:otherwise>
+                    <a href="order">
+                        <button class="btn-back">返回订单列表</button>
+                    </a>
+                </c:otherwise>
+            </c:choose>
         </div>
     </c:if>
 
     <c:if test="${empty order}">
         <div class="empty-order">
             <h2>订单不存在</h2>
-            <a href="orders">
-                <button class="btn-back">返回订单列表</button>
-            </a>
+            <c:choose>
+                <c:when test="${sessionScope.user.role == 'ADMIN'}">
+                    <a href="${pageContext.request.contextPath}/admin/orders">
+                        <button class="btn-back">返回订单管理</button>
+                    </a>
+                </c:when>
+                <c:otherwise>
+                    <a href="order">
+                        <button class="btn-back">返回订单列表</button>
+                    </a>
+                </c:otherwise>
+            </c:choose>
         </div>
     </c:if>
 </div>

@@ -294,8 +294,9 @@ public class OrderServlet extends HttpServlet {
         Long orderId = Long.parseLong(request.getParameter("orderId"));
         Order order = orderDao.findById(orderId);
 
-        // 检查订单是否属于当前用户
-        if (order == null || !order.getUserId().equals(user.getId())) {
+        // 检查订单是否属于当前用户，或者是管理员
+        boolean isAdmin = "ADMIN".equals(user.getRole());
+        if (order == null || (!isAdmin && !order.getUserId().equals(user.getId()))) {
             response.sendRedirect("orders.jsp?error=Order not found");
             return;
         }
@@ -311,7 +312,8 @@ public class OrderServlet extends HttpServlet {
         Order order = orderDao.findById(orderId);
 
         // 检查订单是否属于当前用户且可以取消
-        if (order == null || !order.getUserId().equals(user.getId())) {
+        boolean isAdmin = "ADMIN".equals(user.getRole());
+        if (order == null || (!isAdmin && !order.getUserId().equals(user.getId()))) {
             response.sendRedirect("orders.jsp?error=Order not found");
             return;
         }

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,42 +39,86 @@
     </c:if>
 
     <div class="form-box">
-        <h3>添加商品</h3>
-        <form method="post" action="${pageContext.request.contextPath}/admin/products">
-            <input type="hidden" name="action" value="add" />
-            <div class="row">
-                <div class="col">
-                    <label>名称</label>
-                    <input type="text" name="name" required placeholder="例如：Stranger Under My Skin" />
-                </div>
-                <div class="col">
-                    <label>价格（数字）</label>
-                    <input type="text" name="price" value="0.00" placeholder="128.00" />
-                </div>
-                <div class="col">
-                    <label>库存</label>
-                    <input type="number" name="stock" value="0" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <label>分类</label>
-                    <input type="text" name="category" placeholder="例如：唱片" />
-                </div>
-                <div class="col">
-                    <label>图片 URL（相对于 context，例如 /static/images/goods/xxx.jpg）</label>
-                    <input type="text" name="imageUrl" placeholder="/static/images/goods/stranger.jpg" />
-                </div>
-            </div>
-            <label>简短描述</label>
-            <input type="text" name="description" />
-            <label>详细描述</label>
-            <textarea name="descriptionLong" rows="3"></textarea>
-            <div style="margin-top:8px;">
-                <button type="submit">添加商品</button>
-            </div>
-            <div class="small">提示：添加后商品将写入数据库并对所有用户可见；删除为软删除（active=false）。</div>
-        </form>
+        <h3><c:choose><c:when test="${not empty editProduct}">编辑商品</c:when><c:otherwise>添加商品</c:otherwise></c:choose></h3>
+        <c:choose>
+            <c:when test="${not empty editProduct}">
+                <form method="post" action="${pageContext.request.contextPath}/admin/products" enctype="multipart/form-data">
+                    <input type="hidden" name="action" value="edit" />
+                    <input type="hidden" name="id" value="${editProduct.id}" />
+                    <div class="row">
+                        <div class="col">
+                            <label>名称</label>
+                            <input type="text" name="name" required value="${editProduct.name}" />
+                        </div>
+                        <div class="col">
+                            <label>价格（数字）</label>
+                            <input type="text" name="price" value="${editProduct.price}" />
+                        </div>
+                        <div class="col">
+                            <label>库存</label>
+                            <input type="number" name="stock" value="${editProduct.stock}" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>分类</label>
+                            <input type="text" name="category" value="${editProduct.category}" />
+                        </div>
+                        <div class="col">
+                            <label>替换图片（可选）</label>
+                            <input type="file" name="imageFile" accept="image/*" />
+                            <div class="small">当前: <c:out value="${editProduct.imageUrl}"/></div>
+                        </div>
+                    </div>
+                    <label>简短描述</label>
+                    <input type="text" name="description" value="${editProduct.description}" />
+                    <label>详细描述</label>
+                    <textarea name="descriptionLong" rows="3">${editProduct.descriptionLong}</textarea>
+                    <div style="margin-top:8px;">
+                        <button type="submit">保存修改</button>
+                        <a href="${pageContext.request.contextPath}/admin/products">取消</a>
+                    </div>
+                </form>
+            </c:when>
+            <c:otherwise>
+                <form method="post" action="${pageContext.request.contextPath}/admin/products" enctype="multipart/form-data">
+                    <input type="hidden" name="action" value="add" />
+                    <div class="row">
+                        <div class="col">
+                            <label>名称</label>
+                            <input type="text" name="name" required placeholder="例如：Stranger Under My Skin" />
+                        </div>
+                        <div class="col">
+                            <label>价格（数字）</label>
+                            <input type="text" name="price" value="0.00" placeholder="128.00" />
+                        </div>
+                        <div class="col">
+                            <label>库存</label>
+                            <input type="number" name="stock" value="0" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label>分类</label>
+                            <input type="text" name="category" placeholder="例如：唱片" />
+                        </div>
+                        <div class="col">
+                            <label>图片（本地上传）</label>
+                            <input type="file" name="imageFile" accept="image/*" />
+                            <div class="small">或填写 URL: <input type="text" name="imageUrl" placeholder="/static/images/goods/xxx.jpg"/></div>
+                        </div>
+                    </div>
+                    <label>简短描述</label>
+                    <input type="text" name="description" />
+                    <label>详细描述</label>
+                    <textarea name="descriptionLong" rows="3"></textarea>
+                    <div style="margin-top:8px;">
+                        <button type="submit">添加商品</button>
+                    </div>
+                    <div class="small">提示：添加后商品将写入数据库并对所有用户可见；删除为软删除（active=false）。</div>
+                </form>
+            </c:otherwise>
+        </c:choose>
     </div>
 
     <div class="list-box">
@@ -98,7 +143,24 @@
                             <td>${p.price}</td>
                             <td>${p.stock}</td>
                             <td>${p.category}</td>
-                            <td><c:out value="${p.imageUrl}" /></td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty p.imageUrl}">
+                                        <c:choose>
+                                            <c:when test="${fn:startsWith(p.imageUrl, 'http')}">
+                                                <img src="${p.imageUrl}" alt="img" style="height: 50px; object-fit: cover;" />
+                                            </c:when>
+                                            <c:when test="${fn:startsWith(p.imageUrl, '/')}">
+                                                <img src="${pageContext.request.contextPath}${p.imageUrl}" alt="img" style="height: 50px; object-fit: cover;" />
+                                            </c:when>
+                                            <c:otherwise>
+                                                <img src="${pageContext.request.contextPath}/${p.imageUrl}" alt="img" style="height: 50px; object-fit: cover;" />
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:when>
+                                    <c:otherwise>无图</c:otherwise>
+                                </c:choose>
+                            </td>
                             <td><c:out value="${p.description}" /></td>
                             <td>
                                 <form method="post" action="${pageContext.request.contextPath}/admin/products" style="display:inline;">
@@ -106,6 +168,7 @@
                                     <input type="hidden" name="id" value="${p.id}" />
                                     <button type="submit" onclick="return confirm('确认删除商品 ID=${p.id} ?')">删除</button>
                                 </form>
+                                <a href="${pageContext.request.contextPath}/admin/products?editId=${p.id}">编辑</a>
                             </td>
                         </tr>
                     </c:forEach>
