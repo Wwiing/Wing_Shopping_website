@@ -65,6 +65,44 @@
   - 图片路径：`src/main/webapp/static/images/`（含背景图、商品图片等）
 
 ---
+### 项目结构（节选）
+.
+├─ pom.xml
+├─ Dockerfile
+└─ src
+   └─ main
+      ├─ java
+      │  └─ com/hyy/shopping
+      │     ├─ controller/   # Servlet 控制器
+      │     ├─ dao/          # 数据访问层
+      │     ├─ filter/       # 过滤器（登录拦截等）
+      │     ├─ model/        # 实体类 / POJO
+      │     └─ util/         # 工具类
+      ├─ resources
+      │  └─ c3p0.properties  # 数据库连接池配置
+      └─ webapp
+         ├─ index.jsp
+         ├─ products.jsp
+         ├─ product-detail.jsp
+         ├─ cart.jsp
+         ├─ checkout.jsp
+         ├─ login.jsp
+         ├─ register.jsp
+         ├─ orders.jsp
+         ├─ order-detail.jsp
+         ├─ wallet.jsp
+         ├─ admin/
+         │  ├─ admin-products.jsp
+         │  ├─ orders.jsp
+         │  ├─ sales-report.jsp
+         │  ├─ user-management.jsp
+         │  └─ user-purchase-history.jsp
+         ├─ static/
+         │  ├─ css/
+         │  │  └─ site.css
+         │  └─ images/
+         └─ WEB-INF
+            └─ web.xml
 
 ## 快速开始
 
@@ -93,3 +131,27 @@
 ```bash
 cd D:\code\shopping_website
 mvn clean package
+
+### 4. 部署到 Tomcat
+
+1. 将 `target/shopping_website.war` 拷贝到 Tomcat 的 `webapps` 目录。
+2. 启动 Tomcat：
+   - **Windows**：执行 `bin\startup.bat`
+3. 在浏览器中访问（具体路径取决于 WAR 文件名）：
+   - 如果文件名为 `shopping_website.war`：  
+     [http://localhost:8080/shopping_website/](http://localhost:8080/shopping_website/)
+   - 如果文件名为 `shopping_website_v1.war`：  
+     [http://localhost:8080/shopping_website_v1/](http://localhost:8080/shopping_website_v1/)
+
+---
+
+## 后续优化方向
+
+- 使用 **Spring / Spring Boot** 重构项目结构
+- 使用 **MyBatis / JPA** 简化持久层
+- 实现 **前后端分离**（例如：Vue / React + REST API）
+- 完善非功能特性：
+  - 权限控制
+  - 操作日志
+  - 安全性（如防 XSS、CSRF、SQL 注入等）
+  - 统一异常处理机制
