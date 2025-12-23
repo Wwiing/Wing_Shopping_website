@@ -22,6 +22,13 @@
 <body>
 <div class="admin-container">
     <h2>商品管理（写入数据库）</h2>
+    <p>
+        <a href="${pageContext.request.contextPath}/admin/orders">订单管理</a>
+        <span style="margin: 0 10px;">|</span>
+        <a href="${pageContext.request.contextPath}/admin/sales-report">销售报表</a>
+        <span style="margin: 0 10px;">|</span>
+        <a href="${pageContext.request.contextPath}/admin/user-management">用户管理</a>
+    </p>
     <p><a href="${pageContext.request.contextPath}/admin/orders">返回订单管理</a></p>
 
     <!-- 显示来自 servlet 的消息或错误 -->
