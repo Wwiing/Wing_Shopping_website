@@ -128,7 +128,7 @@
 
 在项目根目录执行以下命令：
 
-```bash
+```
 cd D:\code\shopping_website
 mvn clean package```
 
