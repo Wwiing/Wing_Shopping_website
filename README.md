@@ -130,7 +130,8 @@
 
 ```
 cd D:\code\shopping_website
-mvn clean package```
+mvn clean package
+```
 
 ### 4. 部署到 Tomcat
 
