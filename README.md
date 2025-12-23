@@ -66,7 +66,7 @@
 
 ---
 ### 项目结构（节选）
-.
+```
 ├─ pom.xml
 ├─ Dockerfile
 └─ src
@@ -103,6 +103,7 @@
          │  └─ images/
          └─ WEB-INF
             └─ web.xml
+```
 
 ## 快速开始
 
